@@ -55,14 +55,22 @@ public class Point implements Comparable<Point> {
     public double slopeTo(Point that) {
          /* YOUR CODE HERE */
 
-        if (that.y - this.y == 0) {
-            return 0;
-        } else if (this.x == that.x && this.y == that.y) {
+        if (this.x == that.x && this.y == that.y) {
             return Double.NEGATIVE_INFINITY;
+        } else if (that.y - this.y == 0) {
+            return 0;
         } else if (this.x == that.x) {
             return Double.POSITIVE_INFINITY;
         }
-        return (that.y - this.y) / (that.x - this.x);
+
+        double y = that.y - this.y;
+        double x = that.x - this.x;
+
+        //Se nao for feito com variaveis, isto por alguma razao
+        // ira arredondar o valor para inteiros, o que pode levar a erros
+        //O que originava o erro era return (that.y - this.y) / (that.x - this.x)
+        //return (that.y - this.y) / (that.x - this.x);
+        return y / x;
     }
 
     /**
@@ -93,6 +101,8 @@ public class Point implements Comparable<Point> {
      *
      * @return the Comparator that defines this ordering on points
      */
+
+
     public Comparator<Point> slopeOrder() {
         /* YOUR CODE HERE */
 
@@ -104,8 +114,7 @@ public class Point implements Comparable<Point> {
 
         @Override
         public int compare(Point point1, Point point2) {
-
-            if (slopeTo(point2) - slopeTo(point1) == 0) {
+            if (slopeTo(point2) - slopeTo(point1) == 0 || slopeTo(point1) == slopeTo(point2)) {
                 return 0;
             } else if (slopeTo(point1) < slopeTo(point2)) {
                 return -1;
@@ -129,36 +138,13 @@ public class Point implements Comparable<Point> {
         return "(" + x + ", " + y + ")";
     }
 
-    private boolean isLess(Point that, Point otherThat) {
-        return this.slopeTo(that) < slopeTo(otherThat);
-    }
-
     /**
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
 
-        Point p1 = new Point(0, 0);
-        Point p2 = new Point(0, 100);
-        Point p3 = new Point(100, 100);
-        Point p4 = new Point(100, 0);
-        Point[] points = new Point[4];
-        points[0] = p1;
-        points[1] = p2;
-        points[2] = p3;
-        points[3] = p4;
 
-        System.out.println(p1.slopeTo(p1));
-        System.out.println(p1.slopeTo(p2));
-        System.out.println(p1.slopeTo(p3));
-        System.out.println(p1.slopeTo(p4));
-
-        System.out.println("\nInicio do Teste\n");
-        Arrays.sort(points, p1.slopeOrder());
-        for (Point point : points) {
-            System.out.println(point);
-        }
     }
 }
 
